@@ -1,6 +1,26 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAmount, setFromCurrency, setToCurrency } from '../Redux/currencySlice';
+import Select from 'react-select';
+import Flag from 'react-world-flags';
+
+const currencyOptions = [
+    { value: 'USD', label: 'USD - US Dollar', country: 'US' },
+    { value: 'EUR', label: 'EUR - Euro', country: 'EU' },
+    { value: 'RUB', label: 'RUB - Russian Ruble', country: 'RU' },
+    { value: 'GBP', label: 'GBP - British Pound', country: 'GB' },
+    { value: 'JPY', label: 'JPY - Japanese Yen', country: 'JP' },
+    { value: 'AUD', label: 'AUD - Australian Dollar', country: 'AU' },
+    { value: 'CAD', label: 'CAD - Canadian Dollar', country: 'CA' },
+    { value: 'CHF', label: 'CHF - Swiss Franc', country: 'CH' },
+    { value: 'CNY', label: 'CNY - Chinese Yuan', country: 'CN' },
+    { value: 'INR', label: 'INR - Indian Rupee', country: 'IN' },
+    { value: 'BRL', label: 'BRL - Brazilian Real', country: 'BR' },
+    { value: 'ZAR', label: 'ZAR - South African Rand', country: 'ZA' },
+    { value: 'SGD', label: 'SGD - Singapore Dollar', country: 'SG' },
+    { value: 'KRW', label: 'KRW - South Korean Won', country: 'KR' },
+    { value: 'MXN', label: 'MXN - Mexican Peso', country: 'MX' },
+];
 
 function CurrencyConverter() {
     const dispatch = useDispatch();
@@ -12,6 +32,27 @@ function CurrencyConverter() {
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+
+    const customStyles = {
+        control: (base) => ({
+            ...base,
+            padding: '4px',
+            fontSize: '1rem',
+            borderRadius: '8px',
+        }),
+        option: (base) => ({
+            ...base,
+            display: 'flex',
+            alignItems: 'center',
+        }),
+    };
+
+    const formatOptionLabel = ({ value, label, country }) => (
+        <div className="flex items-center">
+            <Flag code={country} className="w-5 h-5 mr-2" />
+            {label}
+        </div>
+    );
 
     return (
         <div className="max-w-xl mx-auto bg-white p-8 rounded-3xl shadow-lg text-gray-800">
@@ -34,52 +75,28 @@ function CurrencyConverter() {
                 </div>
                 <div>
                     <label className="block text-gray-700 text-lg font-semibold">From</label>
-                    <select
-                        value={fromCurrency}
-                        onChange={(e) => dispatch(setFromCurrency(e.target.value))}
-                        className="w-full mt-1 p-4 text-lg border rounded-lg focus:ring focus:ring-blue-200 outline-none">
-                        <option value="USD">USD - US Dollar</option>
-                        <option value="EUR">EUR - Euro</option>
-                        <option value="RUB">RUB - Russian Ruble</option>
-                        <option value="GBP">GBP - British Pound</option>
-                        <option value="JPY">JPY - Japanese Yen</option>
-                        <option value="AUD">AUD - Australian Dollar</option>
-                        <option value="CAD">CAD - Canadian Dollar</option>
-                        <option value="CHF">CHF - Swiss Franc</option>
-                        <option value="CNY">CNY - Chinese Yuan</option>
-                        <option value="INR">INR - Indian Rupee</option>
-                        <option value="BRL">BRL - Brazilian Real</option>
-                        <option value="ZAR">ZAR - South African Rand</option>
-                        <option value="SGD">SGD - Singapore Dollar</option>
-                        <option value="KRW">KRW - South Korean Won</option>
-                        <option value="MXN">MXN - Mexican Peso</option>
-                    </select>
+                    <Select
+                        value={currencyOptions.find(option => option.value === fromCurrency)}
+                        onChange={(option) => dispatch(setFromCurrency(option.value))}
+                        options={currencyOptions}
+                        formatOptionLabel={formatOptionLabel}
+                        styles={customStyles}
+                        className="w-full mt-1"
+                    />
                 </div>
                 <div className="flex items-center justify-center">
                     <button className="text-blue-600 hover:bg-blue-50 p-2 rounded-full focus:outline-none">&#x21c4;</button>
                 </div>
                 <div>
                     <label className="block text-gray-700 text-lg font-semibold">To</label>
-                    <select
-                        value={toCurrency}
-                        onChange={(e) => dispatch(setToCurrency(e.target.value))}
-                        className="w-full mt-1 p-4 text-lg border rounded-lg focus:ring focus:ring-blue-200 outline-none">
-                        <option value="USD">USD - US Dollar</option>
-                        <option value="EUR">EUR - Euro</option>
-                        <option value="RUB">RUB - Russian Ruble</option>
-                        <option value="GBP">GBP - British Pound</option>
-                        <option value="JPY">JPY - Japanese Yen</option>
-                        <option value="AUD">AUD - Australian Dollar</option>
-                        <option value="CAD">CAD - Canadian Dollar</option>
-                        <option value="CHF">CHF - Swiss Franc</option>
-                        <option value="CNY">CNY - Chinese Yuan</option>
-                        <option value="INR">INR - Indian Rupee</option>
-                        <option value="BRL">BRL - Brazilian Real</option>
-                        <option value="ZAR">ZAR - South African Rand</option>
-                        <option value="SGD">SGD - Singapore Dollar</option>
-                        <option value="KRW">KRW - South Korean Won</option>
-                        <option value="MXN">MXN - Mexican Peso</option>
-                    </select>
+                    <Select
+                        value={currencyOptions.find(option => option.value === toCurrency)}
+                        onChange={(option) => dispatch(setToCurrency(option.value))}
+                        options={currencyOptions}
+                        formatOptionLabel={formatOptionLabel}
+                        styles={customStyles}
+                        className="w-full mt-1"
+                    />
                 </div>
             </div>
             <div className="mt-8 text-center text-gray-700">

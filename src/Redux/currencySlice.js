@@ -4,7 +4,7 @@ const initialState = {
   amount: 0,
   fromCurrency: 'USD',
   toCurrency: 'RUB',
-  exchangeRate: 97.25,
+  exchangeRate: 100,
 };
 
 const currencySlice = createSlice({
